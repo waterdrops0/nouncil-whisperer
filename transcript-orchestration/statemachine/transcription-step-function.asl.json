@@ -126,7 +126,7 @@
                 "MaxConcurrentTransforms": 1,
                 "BatchStrategy": "SingleRecord",
                 "ModelClientConfig": {
-                  "InvocationsTimeoutInSeconds": 3600,
+                  "InvocationsTimeoutInSeconds": 10800,
                   "InvocationsMaxRetries": 0
                 },
                 "TransformInput": {
