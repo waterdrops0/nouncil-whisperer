@@ -102,3 +102,9 @@ That S3 object upload will create an EventBridge event to trigger the transcript
 To have a better feeling for what the process looks like you can check out the following picture for a visualization of the Step Function definition:
 
 [![Overview of the step function](/docs/step-function-overview.png)](/docs/step-function-overview.png)
+
+### TODO List
+
+- Modify the transcription formatting script to remove unnecessary 'start' and 'end' disclaimers and extra decimals on timestamps. ❌
+- Find a way to upload the entire 2h+ audio by increasing the maximum time allowed for the SageMaker job. ❌
+- Ensure the transcription workflow automatically uploads the .txt transcript to GitHub at the end. ❌
