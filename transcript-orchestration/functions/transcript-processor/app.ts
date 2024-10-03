@@ -30,14 +30,14 @@ export const handleEvent = middify(async (event: TranscriptEvent) => {
   ])
 
   const whisperSegments: WhisperSegment[] = whisperOutput.result.segments.map((segment: any) => ({
-    start: segment.start,
-    end: segment.end,
+    start: Math.round(segment.start),
+    end: Math.round(segment.end),
     text: segment.text
   }))
 
   const transcribeSegments: TranscribeSpeakerSegment[] = transcribeOutput.results.speaker_labels.segments.map((segment: any) => ({
-    start: segment.start_time,
-    end: segment.end_time,
+    start: Math.round(parseFloat(segment.start_time)),
+    end: Math.round(parseFloat(segment.end_time)),
     speakerLabel: segment.speaker_label
   }))
 

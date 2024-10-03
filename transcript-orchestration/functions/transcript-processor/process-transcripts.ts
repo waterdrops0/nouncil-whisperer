@@ -37,18 +37,19 @@ export function merge(
     let lastLabel = acc.length > 0 ? acc[acc.length - 1].speakerLabel : ''
     if (segment.speakerLabel !== lastLabel) {
       speakerLabels.add(segment.speakerLabel)
-      acc.push({ speakerLabel: segment.speakerLabel, start: segment.start })
+      acc.push({ speakerLabel: segment.speakerLabel, start: Math.round(segment.start) })
     }
     return acc
   }, [])
 
   // Add the latest speaker change to each whisper segment
   const segments = whisperSegments.map((segment) => {
-    const latestSpeakerChange = closestSpeakerChange(speakerChangeIndex, segment.start)
+    const latestSpeakerChange = closestSpeakerChange(speakerChangeIndex, Math.round(segment.start))
 
     return {
       speakerLabel: latestSpeakerChange?.speakerLabel || 'unknown',
-      ...segment
+      start: Math.round(segment.start),
+      text: segment.text
     }
   })
 
@@ -61,10 +62,12 @@ export function merge(
     const nextSegment = segments[i + 1]
     if (currentSegment.speakerLabel !== nextSegment.speakerLabel && endsWithPartialSentence(currentSegment.text)) {
       const lastSepIndex = Math.max(...['.', '!', '?'].map(sep => currentSegment.text.lastIndexOf(sep)))
-      const truncatedText = currentSegment.text.substring(0, lastSepIndex + 1)
-      const remainingText = currentSegment.text.substring(lastSepIndex + 1, currentSegment.text.length)
-      currentSegment.text = truncatedText
-      nextSegment.text = remainingText + nextSegment.text
+      if (lastSepIndex !== -1) {
+        const truncatedText = currentSegment.text.substring(0, lastSepIndex + 1)
+        const remainingText = currentSegment.text.substring(lastSepIndex + 1).trim()
+        currentSegment.text = truncatedText
+        nextSegment.text = remainingText + ' ' + nextSegment.text
+      }
     }
   }
 
